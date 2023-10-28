@@ -1,0 +1,11 @@
+pkgname="models"
+output="../infrastructure/repository"
+add-global-variants=true
+add-panic-variants=true
+[psql]
+dbname = "sample_db"
+host = "127.0.0.1"
+port = 5432
+user = "postgres"
+pass = "root"
+sslmode = "disable"

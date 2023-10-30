@@ -14,13 +14,9 @@ func NewUserName(value string) (*UserName, error) {
 	if nameLen == 0 {
 		return nil, fmt.Errorf("user name is not input")
 	}
-	if nameLen < 3 {
-		return nil, fmt.Errorf("user name 3 or more characters and please input length %v", nameLen)
+	if nameLen < 3 || nameLen > 10 {
+		return nil, fmt.Errorf("user name should be between 3 and 10 characters, got %v", nameLen)
 	}
-	if nameLen > 10 {
-		return nil, fmt.Errorf("user name 10 characters or less and please input length %v", nameLen)
-	}
-
 	return &UserName{value: value}, nil
 }
 

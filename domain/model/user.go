@@ -1,7 +1,5 @@
 package model
 
-import "context"
-
 type User struct {
 	ID          int
 	UserName    UserName
@@ -15,10 +13,4 @@ func NewSignupUser(userName UserName, mailAddress MailAddress, password Password
 
 func NewUser(ID int, userName UserName, mailAddress MailAddress) *User {
 	return &User{ID: ID, UserName: userName, MailAddress: mailAddress}
-}
-
-type UserRepository interface {
-	Exists(ctx context.Context, email MailAddress) (bool, error)
-	Create(ctx context.Context, user User) error
-	Select(ctx context.Context, email MailAddress) (*User, error)
 }

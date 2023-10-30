@@ -28,24 +28,21 @@ func (u userRepository) Exists(ctx context.Context, email model.MailAddress) (bo
 		models.UserWhere.Mailaddress.EQ(email.String()),
 	).Exists(ctx, u.db)
 	if err != nil {
-		return exists, fmt.Errorf("error occurred at existence confirmation process")
+		return exists, fmt.Errorf("error occurred at existence confirmation process: %v", err)
 	}
 	if exists {
-		return exists, fmt.Errorf("")
+		return exists, fmt.Errorf("registered this email address already: %v", email.String())
 	}
 	return exists, nil
 }
 
 func (u userRepository) Create(ctx context.Context, user model.User) error {
 	input := models.User{
-		//		ID:           user.ID,
 		Username:     user.UserName.String(),
 		Mailaddress:  user.MailAddress.String(),
 		PasswordHash: user.Password.String(),
-		CreatedAt:    time.Time{},
-		UpdatedAt:    time.Time{},
-		//R:            nil,
-		//L:            ,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 	}
 
 	err := input.Insert(ctx, u.db, boil.Infer())
@@ -61,7 +58,7 @@ func (u userRepository) Select(ctx context.Context, email model.MailAddress) (*m
 		qm.Limit(1),
 	).One(ctx, u.db)
 	if err != nil {
-		return nil, fmt.Errorf("sign_up_data_acquisition_error: %v", err)
+		return nil, fmt.Errorf("sign up data acquisition error: %v", err)
 	}
 
 	newUser, err := u.userFactory.Create(user.ID, user.Username, user.Mailaddress)

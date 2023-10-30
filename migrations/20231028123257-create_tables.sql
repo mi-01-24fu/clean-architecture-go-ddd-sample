@@ -1,6 +1,6 @@
 
 -- +migrate Up
-CREATE TABLE Users (
+CREATE TABLE users (
    id SERIAL PRIMARY KEY,
    username VARCHAR(255) NOT NULL,
    mailaddress VARCHAR(255) NOT NULL UNIQUE,
@@ -9,7 +9,7 @@ CREATE TABLE Users (
    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Tasks (
+CREATE TABLE tasks (
    id SERIAL PRIMARY KEY,
    users_id INTEGER REFERENCES Users(id) ON DELETE CASCADE,
    title VARCHAR(255) NOT NULL,
@@ -22,5 +22,5 @@ CREATE TABLE Tasks (
 );
 
 -- +migrate Down
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS users;

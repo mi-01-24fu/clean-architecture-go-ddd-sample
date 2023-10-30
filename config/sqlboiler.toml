@@ -1,5 +1,5 @@
 pkgname="models"
-output="../infrastructure/repository"
+output="../infrastructure/repository/models"
 add-global-variants=true
 add-panic-variants=true
 [psql]
@@ -9,3 +9,8 @@ port = 5432
 user = "postgres"
 pass = "root"
 sslmode = "disable"
+schema = "public"
+whitelist = [
+    "users",
+    "tasks"
+]

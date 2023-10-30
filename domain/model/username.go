@@ -23,3 +23,7 @@ func NewUserName(value string) (*UserName, error) {
 
 	return &UserName{value: value}, nil
 }
+
+func (u UserName) String() string {
+	return u.value
+}

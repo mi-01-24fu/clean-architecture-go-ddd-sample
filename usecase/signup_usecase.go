@@ -21,9 +21,15 @@ func NewSignupUsecase(userRepository model.UserRepository, encrypt crypto.Encryp
 }
 
 type SignupRequest struct {
-	UserName    string
-	MailAddress string
-	Password    string
+	UserName    string `json:"user_name"`
+	MailAddress string `json:"mail_address"`
+	Password    string `json:"password"`
+}
+
+type SignupResponse struct {
+	ID          int    `json:"id"`
+	UserName    string `json:"user_name" json:"user_name"`
+	MailAddress string `json:"mail_address" json:"mail_address"`
 }
 
 func (s signupUsecase) Signup(ctx context.Context, req SignupRequest) (*model.User, error) {
@@ -37,7 +43,7 @@ func (s signupUsecase) Signup(ctx context.Context, req SignupRequest) (*model.Us
 		return nil, err
 	}
 
-	exists, err := s.userRepository.GetByEmail(ctx, *mailAddress)
+	exists, err := s.userRepository.Exists(ctx, *mailAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -54,12 +60,15 @@ func (s signupUsecase) Signup(ctx context.Context, req SignupRequest) (*model.Us
 	if err != nil {
 		return nil, err
 	}
+
 	unregisteredUser := model.NewSignupUser(*userName, *mailAddress, *(model.NewSignupPassword(hash)))
 
-	registeredUser, err := s.userRepository.Create(ctx, *unregisteredUser)
+	err = s.userRepository.Create(ctx, *unregisteredUser)
 	if err != nil {
 		return nil, err
 	}
 
-	return registeredUser, nil
+	newUser, err := s.userRepository.Select(ctx, *mailAddress)
+
+	return newUser, nil
 }
